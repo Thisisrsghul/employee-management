@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMS — Employee Management System</title>
+    <link rel="stylesheet" href="auth.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- Left branding panel -->
+    <div class="panel-left">
+        <div class="brand">
+            <div class="brand-icon"><i class="fas fa-users"></i></div>
+            <div class="brand-name">EM<span>S</span></div>
+        </div>
+        <h1 class="panel-headline">Manage your<br>workforce with <em>clarity</em></h1>
+        <p class="panel-sub">A unified system for employees, payroll, and attendance — built for teams that move fast.</p>
+        <div class="feature-list">
+            <div class="feature-item">
+                <div class="feature-dot"><i class="fas fa-user-tie"></i></div>
+                Role-based access for Admins, Managers &amp; Employees
+            </div>
+            <div class="feature-item">
+                <div class="feature-dot"><i class="fas fa-coins"></i></div>
+                Automated payroll with bonuses and deductions
+            </div>
+            <div class="feature-item">
+                <div class="feature-dot"><i class="fas fa-calendar-check"></i></div>
+                Real-time attendance tracking and reporting
+            </div>
+        </div>
+    </div>
+
+    <!-- Right auth panel -->
+    <div class="panel-right">
+
+        <!-- Login -->
+        <div class="auth-box" id="loginContainer">
+            <h2 class="auth-title">Welcome back</h2>
+            <p class="auth-subtitle">Sign in to your account to continue</p>
+
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <div class="input-wrap">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="username" placeholder="Enter your username" required autocomplete="username">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-wrap">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="password" placeholder="Enter your password" required autocomplete="current-password">
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary">
+                    <i class="fas fa-arrow-right-to-bracket"></i> Sign In
+                </button>
+            </form>
+
+            <div class="divider">OR</div>
+
+            <button class="btn-secondary" onclick="toggleForm()">
+                <i class="fas fa-user-plus"></i> Create an account
+            </button>
+
+            <div class="demo-box">
+                <p>Demo accounts</p>
+                <div class="demo-row">
+                    <span>👤 Admin</span>
+                    <code>admin / admin123</code>
+                </div>
+                <div class="demo-row">
+                    <span>👔 Manager</span>
+                    <code>manager / manager123</code>
+                </div>
+                <div class="demo-row">
+                    <span>💼 Employee</span>
+                    <code>emp1 / emp123</code>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sign Up -->
+        <div class="auth-box hidden" id="signupContainer">
+            <h2 class="auth-title">Create account</h2>
+            <p class="auth-subtitle">Join your organization's workspace</p>
+
+            <form id="signupForm" onsubmit="handleSignup(event)">
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <div class="input-wrap">
+                        <i class="fas fa-id-card"></i>
+                        <input type="text" id="fullName" placeholder="John Doe" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="signupUsername">Username</label>
+                    <div class="input-wrap">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="signupUsername" placeholder="Choose a username" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="signupEmail">Email</label>
+                    <div class="input-wrap">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="signupEmail" placeholder="you@company.com" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="signupPassword">Password</label>
+                    <div class="input-wrap">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="signupPassword" placeholder="Create a password" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="role">Role</label>
+                    <div class="input-wrap">
+                        <i class="fas fa-briefcase"></i>
+                        <select id="role" required>
+                            <option value="">Select role</option>
+                            <option value="EMPLOYEE">Employee</option>
+                            <option value="MANAGER">Manager</option>
+                            <option value="ADMIN">Admin</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary">
+                    <i class="fas fa-user-plus"></i> Create Account
+                </button>
+            </form>
+
+            <div class="divider">OR</div>
+            <button class="btn-secondary" onclick="toggleForm()">
+                <i class="fas fa-arrow-left"></i> Back to Sign In
+            </button>
+        </div>
+
+    </div>
+
+    <div id="toast" class="toast"></div>
+    <script src="auth.js"></script>
+</body>
+</html>

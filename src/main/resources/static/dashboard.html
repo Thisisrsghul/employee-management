@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMS — Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<!-- ===== SIDEBAR ===== -->
+<aside class="sidebar">
+    <div class="sidebar-brand">
+        <div class="brand-icon"><i class="fas fa-users"></i></div>
+        <div class="brand-text">
+            <div class="name">EMS</div>
+            <div class="tagline">Employee Management</div>
+        </div>
+    </div>
+
+    <nav class="sidebar-nav">
+        <div class="nav-label">Main</div>
+        <button class="nav-item active" data-section="dashboard">
+            <i class="fas fa-chart-pie"></i> Overview
+        </button>
+
+        <div class="nav-label">Management</div>
+        <button class="nav-item" data-section="employees" id="empNav">
+            <i class="fas fa-user-group"></i> Employees
+        </button>
+        <button class="nav-item" data-section="payroll" id="payNav">
+            <i class="fas fa-coins"></i> Payroll
+        </button>
+        <button class="nav-item" data-section="attendance" id="attNav">
+            <i class="fas fa-calendar-check"></i> Attendance
+        </button>
+    </nav>
+
+    <div class="sidebar-footer">
+        <div class="sidebar-user">
+            <div class="user-avatar" id="userAvatar">U</div>
+            <div class="user-info">
+                <div class="name" id="userFullName">Loading…</div>
+                <div class="role-text" id="userRole">—</div>
+            </div>
+        </div>
+        <button class="btn-logout" onclick="logout()">
+            <i class="fas fa-arrow-right-from-bracket"></i> Sign Out
+        </button>
+    </div>
+</aside>
+
+<!-- ===== MAIN CONTENT ===== -->
+<div class="main-content">
+
+    <!-- TOP HEADER -->
+    <header class="top-header">
+        <div class="header-left">
+            <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+            <h1 class="page-title">Overview</h1>
+        </div>
+        <div class="header-right">
+            <div class="search-bar">
+                <i class="fas fa-magnifying-glass"></i>
+                <input type="text" placeholder="Search…">
+            </div>
+            <div class="header-badge">
+                <span id="roleBadge" class="role-badge role-employee">EMPLOYEE</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===== DASHBOARD SECTION ===== -->
+    <section class="section active" id="dashboard">
+        <div class="section-header">
+            <div>
+                <h2>Good to see you 👋</h2>
+                <p>Here's what's happening across your organisation today.</p>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon indigo"><i class="fas fa-users"></i></div>
+                <div class="stat-body">
+                    <div class="label">Total Employees</div>
+                    <div class="value" id="dashTotalEmp">—</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon green"><i class="fas fa-coins"></i></div>
+                <div class="stat-body">
+                    <div class="label">Salary Pool</div>
+                    <div class="value" id="dashTotalSalary">—</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon amber"><i class="fas fa-circle-check"></i></div>
+                <div class="stat-body">
+                    <div class="label">Present Today</div>
+                    <div class="value" id="dashPresent">—</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon blue"><i class="fas fa-building"></i></div>
+                <div class="stat-body">
+                    <div class="label">Departments</div>
+                    <div class="value" id="dashDepts">—</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3>Team by Department</h3>
+            </div>
+            <div class="card-body" id="deptChart">
+                <div class="empty-state"><i class="fas fa-chart-bar"></i><p>Loading data…</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== EMPLOYEES SECTION ===== -->
+    <section class="section" id="employees">
+        <div class="section-header">
+            <div>
+                <h2>Employees</h2>
+                <p>Manage your team members and their records.</p>
+            </div>
+            <button class="btn btn-primary" id="addEmpBtn" onclick="toggleForm('empForm')">
+                <i class="fas fa-plus"></i> Add Employee
+            </button>
+        </div>
+
+        <div class="inline-form hidden" id="empForm">
+            <h4><i class="fas fa-user-plus"></i> New Employee</h4>
+            <form onsubmit="addEmployee(event)">
+                <div class="form-row">
+                    <div class="form-field">
+                        <label>Full Name</label>
+                        <input type="text" id="empName" placeholder="Jane Smith" required>
+                    </div>
+                    <div class="form-field">
+                        <label>Department</label>
+                        <select id="empDept" required>
+                            <option value="">Select department</option>
+                            <option>Engineering</option>
+                            <option>Marketing</option>
+                            <option>HR</option>
+                            <option>Finance</option>
+                            <option>Operations</option>
+                            <option>Design</option>
+                            <option>Sales</option>
+                        </select>
+                    </div>
+                    <div class="form-field">
+                        <label>Salary (₹)</label>
+                        <input type="number" id="empSalary" placeholder="50000" required min="0">
+                    </div>
+                    <div class="form-field">
+                        <label>Hire Date</label>
+                        <input type="date" id="empHireDate" required>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-check"></i> Save Employee</button>
+                    <button type="button" class="btn btn-ghost" onclick="toggleForm('empForm')">Cancel</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="card">
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Department</th>
+                            <th>Salary</th>
+                            <th>Hire Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="employeeBody">
+                        <tr><td colspan="6"><div class="empty-state"><i class="fas fa-user-group"></i><p>Loading employees…</p></div></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== PAYROLL SECTION ===== -->
+    <section class="section" id="payroll">
+        <div class="section-header">
+            <div>
+                <h2>Payroll</h2>
+                <p>Track salary, bonuses, and deductions for each pay period.</p>
+            </div>
+            <button class="btn btn-primary" id="addPayBtn" onclick="toggleForm('payForm')">
+                <i class="fas fa-plus"></i> Add Record
+            </button>
+        </div>
+
+        <div class="inline-form hidden" id="payForm">
+            <h4><i class="fas fa-coins"></i> New Payroll Entry</h4>
+            <form onsubmit="addPayroll(event)">
+                <div class="form-row">
+                    <div class="form-field">
+                        <label>Employee ID</label>
+                        <input type="number" id="payEmpId" placeholder="1" required min="1">
+                    </div>
+                    <div class="form-field">
+                        <label>Bonus (₹)</label>
+                        <input type="number" id="payBonus" placeholder="0" value="0" min="0">
+                    </div>
+                    <div class="form-field">
+                        <label>Deductions (₹)</label>
+                        <input type="number" id="payDeductions" placeholder="0" value="0" min="0">
+                    </div>
+                    <div class="form-field">
+                        <label>Month</label>
+                        <input type="month" id="payMonth" required>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-check"></i> Save Record</button>
+                    <button type="button" class="btn btn-ghost" onclick="toggleForm('payForm')">Cancel</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="card">
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Employee</th>
+                            <th>Basic Salary</th>
+                            <th>Bonus</th>
+                            <th>Deductions</th>
+                            <th>Net Salary</th>
+                            <th>Month</th>
+                        </tr>
+                    </thead>
+                    <tbody id="payrollBody">
+                        <tr><td colspan="7"><div class="empty-state"><i class="fas fa-coins"></i><p>Loading payroll…</p></div></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== ATTENDANCE SECTION ===== -->
+    <section class="section" id="attendance">
+        <div class="section-header">
+            <div>
+                <h2>Attendance</h2>
+                <p>Mark and review daily attendance for your team.</p>
+            </div>
+            <button class="btn btn-primary" id="addAttBtn" onclick="toggleForm('attForm')">
+                <i class="fas fa-plus"></i> Mark Attendance
+            </button>
+        </div>
+
+        <div class="inline-form hidden" id="attForm">
+            <h4><i class="fas fa-calendar-plus"></i> Mark Attendance</h4>
+            <form onsubmit="markAttendance(event)">
+                <div class="form-row">
+                    <div class="form-field">
+                        <label>Employee ID</label>
+                        <input type="number" id="attEmpId" placeholder="1" required min="1">
+                    </div>
+                    <div class="form-field">
+                        <label>Date</label>
+                        <input type="date" id="attDate" required>
+                    </div>
+                    <div class="form-field">
+                        <label>Status</label>
+                        <select id="attStatus" required>
+                            <option value="">Select status</option>
+                            <option value="PRESENT">Present</option>
+                            <option value="ABSENT">Absent</option>
+                            <option value="LEAVE">On Leave</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-check"></i> Save</button>
+                    <button type="button" class="btn btn-ghost" onclick="toggleForm('attForm')">Cancel</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="card">
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Employee</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="attendanceBody">
+                        <tr><td colspan="4"><div class="empty-state"><i class="fas fa-calendar-check"></i><p>Loading attendance…</p></div></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+</div><!-- end .main-content -->
+
+<div id="toast" class="toast"></div>
+
+<script src="dashboard.js"></script>
+<script>
+// Patch dashboard.js to use new CSS classes for rendered rows
+
+// Override loadEmployees to use new badge styles
+const _origLoadEmployees = loadEmployees;
+window.loadEmployees = async function() {
+    try {
+        const response = await fetch(`${API_URL}/employees`);
+        const employees = await response.json();
+        const tbody = document.getElementById('employeeBody');
+        tbody.innerHTML = '';
+        if (employees.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6"><div class="empty-state"><i class="fas fa-user-slash"></i><p>No employees found. Add one to get started.</p></div></td></tr>';
+            return;
+        }
+        employees.forEach(emp => {
+            const deleteBtn = (currentUser && currentUser.role === 'ADMIN')
+                ? `<button class="btn btn-danger" onclick="deleteEmployee(${emp.employeeId})"><i class="fas fa-trash"></i> Delete</button>` : '—';
+            tbody.innerHTML += `
+                <tr>
+                    <td class="mono">#${emp.employeeId}</td>
+                    <td><strong>${emp.employeeName}</strong></td>
+                    <td><span class="badge badge-dept">${emp.department}</span></td>
+                    <td>₹${emp.salary?.toLocaleString('en-IN', {maximumFractionDigits: 0})}</td>
+                    <td>${emp.hireDate}</td>
+                    <td>${deleteBtn}</td>
+                </tr>`;
+        });
+    } catch(e) { console.error(e); }
+};
+
+const _origLoadPayroll = loadPayroll;
+window.loadPayroll = async function() {
+    try {
+        const response = await fetch(`${API_URL}/payroll`);
+        const payroll = await response.json();
+        const tbody = document.getElementById('payrollBody');
+        tbody.innerHTML = '';
+        if (payroll.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="7"><div class="empty-state"><i class="fas fa-file-invoice-dollar"></i><p>No payroll records yet.</p></div></td></tr>';
+            return;
+        }
+        payroll.forEach(p => {
+            tbody.innerHTML += `
+                <tr>
+                    <td class="mono">#${p.payrollId}</td>
+                    <td>Emp #${p.employeeId}</td>
+                    <td>₹${p.basicSalary?.toLocaleString('en-IN')}</td>
+                    <td style="color:var(--green)">₹${p.bonus?.toLocaleString('en-IN')}</td>
+                    <td style="color:var(--red)">₹${p.deductions?.toLocaleString('en-IN')}</td>
+                    <td><strong>₹${p.netSalary?.toLocaleString('en-IN')}</strong></td>
+                    <td>${p.payrollMonth}</td>
+                </tr>`;
+        });
+    } catch(e) { console.error(e); }
+};
+
+const _origLoadAttendance = loadAttendance;
+window.loadAttendance = async function() {
+    try {
+        const response = await fetch(`${API_URL}/attendance`);
+        const attendance = await response.json();
+        const tbody = document.getElementById('attendanceBody');
+        tbody.innerHTML = '';
+        if (attendance.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="4"><div class="empty-state"><i class="fas fa-calendar-xmark"></i><p>No attendance records yet.</p></div></td></tr>';
+            return;
+        }
+        attendance.forEach(att => {
+            const cls = att.status === 'PRESENT' ? 'badge-present' : att.status === 'ABSENT' ? 'badge-absent' : 'badge-leave';
+            tbody.innerHTML += `
+                <tr>
+                    <td class="mono">#${att.attendanceId}</td>
+                    <td>Emp #${att.employeeId}</td>
+                    <td>${att.attendanceDate}</td>
+                    <td><span class="badge ${cls}">${att.status}</span></td>
+                </tr>`;
+        });
+    } catch(e) { console.error(e); }
+};
+
+// Override loadDashboard dept chart
+const _origLoadDashboard = loadDashboard;
+window.loadDashboard = async function() {
+    try {
+        const empRes  = await fetch(`${API_URL}/employees`);
+        const employees = await empRes.json();
+        const payRes  = await fetch(`${API_URL}/payroll`);
+        const attRes  = await fetch(`${API_URL}/attendance`);
+        const attendance = await attRes.json();
+
+        document.getElementById('dashTotalEmp').textContent = employees.length;
+        const totalSalary = employees.reduce((s, e) => s + (e.salary || 0), 0);
+        document.getElementById('dashTotalSalary').textContent = `₹${totalSalary.toLocaleString('en-IN',{maximumFractionDigits:0})}`;
+        const todayPresent = attendance.filter(a => new Date(a.attendanceDate).toDateString() === new Date().toDateString() && a.status === 'PRESENT').length;
+        document.getElementById('dashPresent').textContent = todayPresent;
+        const depts = new Set(employees.map(e => e.department));
+        document.getElementById('dashDepts').textContent = depts.size;
+
+        const deptChart = {};
+        employees.forEach(e => { deptChart[e.department] = (deptChart[e.department] || 0) + 1; });
+        const chartEl = document.getElementById('deptChart');
+        if (Object.keys(deptChart).length === 0) {
+            chartEl.innerHTML = '<div class="empty-state"><i class="fas fa-chart-bar"></i><p>No employees yet.</p></div>';
+            return;
+        }
+        let html = '';
+        for (const [dept, count] of Object.entries(deptChart)) {
+            const pct = (count / employees.length * 100).toFixed(0);
+            html += `<div class="dept-bar-wrap">
+                <div class="dept-bar-label">${dept}<span>${count} (${pct}%)</span></div>
+                <div class="dept-bar-track"><div class="dept-bar-fill" style="width:${pct}%"></div></div>
+            </div>`;
+        }
+        chartEl.innerHTML = html;
+    } catch(e) { console.error(e); }
+};
+
+// Patch checkAuth to update avatar initial
+const _origCheckAuth = checkAuth;
+window.checkAuth = function() {
+    _origCheckAuth();
+    if (currentUser && currentUser.fullName) {
+        const initials = currentUser.fullName.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
+        const av = document.getElementById('userAvatar');
+        if (av) av.textContent = initials;
+    }
+};
+
+// Update page title on navigation
+document.querySelectorAll('.nav-item').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const titles = { dashboard:'Overview', employees:'Employees', payroll:'Payroll', attendance:'Attendance' };
+        const t = document.querySelector('.page-title');
+        if (t) t.textContent = titles[btn.dataset.section] || 'EMS';
+    });
+});
+</script>
+</body>
+</html>
